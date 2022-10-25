@@ -1,0 +1,40 @@
+import os
+import time
+from time import sleep
+import numpy as np
+from matplotlib import pyplot as plt
+import RPi.GPIO as gpio
+import cv2
+
+def blink_led():
+    gpio.setmode(gpio.BOARD)
+    gpio.setup(12, gpio.OUT)
+    gpio.output(12, True)
+    sleep(5)
+    gpio.output(12, False)
+   
+def button():
+    gpio.setmode(gpio.BOARD) # Use physical pin numbering
+    gpio.setup(10, gpio.IN, pull_up_down=gpio.PUD_DOWN)
+    if gpio.input(10) == gpio.HIGH:
+        print("Boto apretado ")
+
+def mkdir():
+    directory = "ejemplo"
+    # Parent Directory path
+    parent_dir = "/home/User/Documents'"
+    path = os.path.join(parent_dir, directory)
+    os.mkdir(path)
+    print("Directory '% s' created" % directory)
+
+def take_video():
+    cam = cv2.VideoCapture(0)
+    while True:
+        ret, image = cam.read()
+        cv2.imshow('Imagetest',image)
+        k = cv2.waitKey(1)
+        if k != -1:
+            break
+    cv2.imwrite('/home/pi/test.jpg', image)
+    cam.release()
+    cv2.destroyAllWindows()
